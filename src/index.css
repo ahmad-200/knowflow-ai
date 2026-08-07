@@ -1,0 +1,47 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,600;0,700;0,800;1,400&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --font-heading: "Plus Jakarta Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --color-primary: oklch(0.3462 0.0736 256.04);
+  --color-on-primary: oklch(1.0 0 0);
+  --color-secondary: oklch(0.5461 0.2152 262.88);
+  --color-accent: oklch(0.596 0.1274 163.23);
+  --color-background: oklch(0.9842 0.0034 247.86);
+  --color-foreground: oklch(0.2077 0.0398 265.75);
+  --color-muted: oklch(0.9632 0.0034 247.86);
+  --color-muted-foreground: oklch(0.5561 0.0283 264.36);
+  --color-border: oklch(0.9268 0.0063 255.48);
+  --color-destructive: oklch(0.5771 0.2152 27.33);
+  --color-ring: oklch(0.3462 0.0736 256.04);
+}
+
+/* Base styles */
+body {
+  @apply bg-background text-foreground font-sans antialiased;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-border rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-muted-foreground/30;
+}
+
+/* Focus visible styles for keyboard nav */
+*:focus-visible {
+  @apply outline-2 outline-offset-2 outline-ring;
+}
