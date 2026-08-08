@@ -52,14 +52,14 @@ export function AppLayout() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-border transition-all duration-300",
+          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-border transition-all duration-300 bg-dot-grid-light",
           sidebarOpen ? "w-64" : "w-0 -translate-x-full lg:w-16 lg:translate-x-0"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-gradient-to-r from-transparent via-primary/[0.01] to-transparent">
           <div className="flex items-center gap-3">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-on-primary font-bold text-xs">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-on-primary font-bold text-sm shadow-lg shadow-primary/20">
               KF
             </div>
             {sidebarOpen && (
@@ -77,7 +77,7 @@ export function AppLayout() {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 space-y-1 p-3">
+        <nav className="flex-1 space-y-0.5 p-3">
           {navItems.map((item) => (
             <NavLink
               key={item.to}
@@ -87,30 +87,41 @@ export function AppLayout() {
               }}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 overflow-hidden group",
                   isActive
                     ? "bg-primary/10 text-primary shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-[1.02] active:scale-[0.98]"
                 )
               }
             >
-              <item.icon className="h-5 w-5 shrink-0" />
+              {/* Active indicator bar */}
+              {({ isActive }) =>
+                isActive && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-primary rounded-full animate-scale-in" />
+                )
+              }
+              <item.icon className={cn(
+                "h-5 w-5 shrink-0 transition-transform duration-150",
+                "group-hover:scale-110"
+              )} />
               {sidebarOpen && <span>{item.label}</span>}
             </NavLink>
           ))}
         </nav>
 
         {/* Bottom gradient accent */}
-        <div className="h-0.5 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20" />
+        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mx-3" />
 
         {/* User area */}
-        <div className="border-t border-border p-3">
+        <div className="p-3">
           {sidebarOpen ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted transition-colors cursor-pointer">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>{initials}</AvatarFallback>
+                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted/70 transition-all duration-150 cursor-pointer group">
+                  <Avatar className="h-8 w-8 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
+                    <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary font-semibold text-xs">
+                      {initials}
+                    </AvatarFallback>
                   </Avatar>
                   <div className="flex-1 text-left min-w-0">
                     <p className="text-sm font-medium text-foreground truncate">
@@ -132,9 +143,11 @@ export function AppLayout() {
           ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex w-full items-center justify-center rounded-lg p-2 hover:bg-muted transition-colors cursor-pointer">
-                  <Avatar className="h-8 w-8">
-                    <AvatarFallback>{initials}</AvatarFallback>
+                <button className="flex w-full items-center justify-center rounded-lg p-2 hover:bg-muted/70 transition-all duration-150 cursor-pointer group">
+                  <Avatar className="h-8 w-8 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
+                    <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary font-semibold text-xs">
+                      {initials}
+                    </AvatarFallback>
                   </Avatar>
                 </button>
               </DropdownMenuTrigger>
