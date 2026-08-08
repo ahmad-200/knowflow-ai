@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { NavLink, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
@@ -82,7 +82,7 @@ export function AppLayout() {
           {navItems.map((item) => {
             const isActive = location.pathname.startsWith(item.to);
             return (
-              <NavLink
+              <Link
                 key={item.to}
                 to={item.to}
                 onClick={() => {
@@ -103,7 +103,7 @@ export function AppLayout() {
                   "group-hover:scale-110"
                 )} />
                 {sidebarOpen && <span>{item.label}</span>}
-              </NavLink>
+              </Link>
             );
           })}
         </nav>
