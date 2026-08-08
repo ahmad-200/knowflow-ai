@@ -19,6 +19,60 @@ Built for the hackathon demo: a polished, production-style React frontend backed
 - **📱 Responsive UI** — Clean, professional design that works from mobile to desktop.
 
 ---
+## Screenshots
+
+### Dashboard
+![Dashboard](./screenshots/dashboard.PNG)
+
+### Document Upload
+![Document Upload](./screenshots/documents.PNG)
+
+### Chat with Citations
+![Chat with Citations](./screenshots/chat.PNG)
+
+### Login / Sign Up
+![Login](./screenshots/login.PNG)
+
+---
+
+## Demo
+
+[Live demo](https://vll77932p4k36fwd78oncahk.nativelyai.app/)
+
+
+
+---
+
+## Team
+
+Built for AI Factory Hackathon by Lablab.ai:
+
+| Name | Role |
+|------|------|
+| BimbsyStats | Core RAG pipeline, document ingestion workflow, backend API connections |
+| Kaleem | Frontend developer - built the UI using React/Vite |
+| Ahmed | GitHub repository operations, version control, developer workflow sync |
+| Momina | Presentation design, visual layouts, UI component design, deck formatting |
+
+---
+
+## Known Limitations
+
+- Only PDF and plain-text documents are currently supported (DOCX, Markdown, and spreadsheets are on the roadmap).
+- Chat responses are returned in full rather than streamed token-by-token.
+- Single AI provider (AIML API) - no fallback if the provider is down.
+- No team/workspace sharing yet; documents and chats are strictly per-user.
+- Large PDFs (100+ pages) may take longer to process since chunking and embedding run synchronously in the Edge Function.
+
+---
+
+## Acknowledgments
+
+- Built for AI Factory Hackathon by Lablab.ai, August 6–10, 2026.
+- Powered by AIML API (OpenAI-compatible embeddings + chat completions).
+- Backend infrastructure by Supabase (Auth, Postgres, pgvector, Storage, Edge Functions).
+- UI components adapted from shadcn/ui.
+
 
 ## 🏗️ Architecture
 
