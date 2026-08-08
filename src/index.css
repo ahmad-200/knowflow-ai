@@ -16,6 +16,32 @@
   --color-border: oklch(0.9268 0.0063 255.48);
   --color-destructive: oklch(0.5771 0.2152 27.33);
   --color-ring: oklch(0.3462 0.0736 256.04);
+  --color-card: oklch(1 0 0);
+  --color-card-foreground: oklch(0.2077 0.0398 265.75);
+  --shadow-glass: 0 0 0 1px rgba(0,0,0,0.03), 0 2px 4px rgba(0,0,0,0.03), 0 12px 24px rgba(0,0,0,0.06);
+  --shadow-glass-lg: 0 0 0 1px rgba(0,0,0,0.03), 0 4px 8px rgba(0,0,0,0.04), 0 16px 32px rgba(0,0,0,0.08);
+  --shadow-card: 0 1px 3px rgba(0,0,0,0.04), 0 1px 2px rgba(0,0,0,0.02);
+  --shadow-card-hover: 0 4px 12px rgba(0,0,0,0.06), 0 2px 4px rgba(0,0,0,0.03);
+  --animate-gradient-x: gradientX 8s ease infinite;
+  --animate-pulse-soft: pulseSoft 3s ease-in-out infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-scale-in: scaleIn 0.3s ease-out;
+  @keyframes gradientX {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes pulseSoft {
+    0%, 100% { opacity: 0.4; }
+    50% { opacity: 0.7; }
+  }
+  @keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-8px); }
+  }
+  @keyframes scaleIn {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
 }
 
 /* Base styles */
@@ -45,3 +71,35 @@ body {
 *:focus-visible {
   @apply outline-2 outline-offset-2 outline-ring;
 }
+
+/* Dot-grid background texture */
+.bg-dot-grid {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.bg-dot-grid-light {
+  background-image: radial-gradient(circle, rgba(0,0,0,0.03) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Glass morphism utilities */
+.glass {
+  @apply bg-white/70 backdrop-blur-xl border border-white/20 shadow-glass;
+}
+.glass-darker {
+  @apply bg-white/85 backdrop-blur-xl border border-white/20 shadow-glass;
+}
+
+/* Gradient text */
+.gradient-text {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-primary via-primary/80 to-accent;
+}
+
+/* Stagger animation helpers */
+.stagger-1 { animation-delay: 50ms; }
+.stagger-2 { animation-delay: 100ms; }
+.stagger-3 { animation-delay: 150ms; }
+.stagger-4 { animation-delay: 200ms; }
+.stagger-5 { animation-delay: 250ms; }
+.stagger-6 { animation-delay: 300ms; }
