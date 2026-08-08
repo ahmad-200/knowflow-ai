@@ -7,6 +7,7 @@ import {
   Upload,
   Sparkles,
   BookOpen,
+  LayoutDashboard,
 } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
@@ -46,6 +47,7 @@ export default function DashboardPage() {
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-primary/[0.02] to-background border border-primary/10 p-6 lg:p-8">
         <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/[0.06] to-transparent rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
         <div className="relative space-y-6">
+          {/* Welcome greeting */}
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-on-primary shadow-sm">
               <Sparkles className="h-5 w-5" />
@@ -54,46 +56,34 @@ export default function DashboardPage() {
               <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight">
                 Welcome back
               </h1>
-              <p className="text-muted-foreground text-sm mt-0.5">
-                Where would you like to go?
-              </p>
             </div>
           </div>
 
-          {/* Quick action chips inside the hero */}
-          <div className="flex flex-col sm:flex-row gap-3">
+          {/* Inline action chips */}
+          <p className="text-sm text-muted-foreground -mb-1">
+            Where would you like to go?
+          </p>
+          <div className="flex flex-wrap items-center gap-3">
+            <button
+              onClick={() => navigate("/dashboard")}
+              className="group inline-flex items-center gap-2 rounded-full border border-border bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-foreground shadow-xs hover:shadow-sm hover:bg-white hover:border-primary/30 transition-all duration-200 cursor-pointer active:scale-[0.97]"
+            >
+              <LayoutDashboard className="h-4 w-4 text-primary" />
+              <span>Dashboard</span>
+            </button>
             <button
               onClick={() => navigate("/documents")}
-              className="group flex-1 relative flex items-center gap-3 rounded-xl border border-border bg-white/80 backdrop-blur-sm p-4 shadow-sm hover:shadow-md hover:border-primary/30 hover:bg-white transition-all duration-200 cursor-pointer text-left overflow-hidden active:scale-[0.98]"
+              className="group inline-flex items-center gap-2 rounded-full border border-border bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-foreground shadow-xs hover:shadow-sm hover:bg-white hover:border-primary/30 transition-all duration-200 cursor-pointer active:scale-[0.97]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary group-hover:scale-105 transition-transform duration-200">
-                <Upload className="h-5 w-5" />
-              </div>
-              <div className="relative flex-1 min-w-0">
-                <p className="font-semibold text-foreground text-sm">Upload a document</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Add a PDF to your knowledge base
-                </p>
-              </div>
-              <ArrowRight className="relative h-4 w-4 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
+              <Upload className="h-4 w-4 text-primary" />
+              <span>Documents</span>
             </button>
-
             <button
               onClick={() => navigate("/chat")}
-              className="group flex-1 relative flex items-center gap-3 rounded-xl border border-border bg-white/80 backdrop-blur-sm p-4 shadow-sm hover:shadow-md hover:border-accent/30 hover:bg-white transition-all duration-200 cursor-pointer text-left overflow-hidden active:scale-[0.98]"
+              className="group inline-flex items-center gap-2 rounded-full border border-border bg-white/70 backdrop-blur-sm px-4 py-2 text-sm font-medium text-foreground shadow-xs hover:shadow-sm hover:bg-white hover:border-accent/30 transition-all duration-200 cursor-pointer active:scale-[0.97]"
             >
-              <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
-              <div className="relative flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent/10 to-accent/5 text-accent group-hover:scale-105 transition-transform duration-200">
-                <MessageSquareText className="h-5 w-5" />
-              </div>
-              <div className="relative flex-1 min-w-0">
-                <p className="font-semibold text-foreground text-sm">Start a new chat</p>
-                <p className="text-xs text-muted-foreground mt-0.5">
-                  Ask questions about your documents
-                </p>
-              </div>
-              <ArrowRight className="relative h-4 w-4 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
+              <MessageSquareText className="h-4 w-4 text-accent" />
+              <span>Chat</span>
             </button>
           </div>
         </div>
