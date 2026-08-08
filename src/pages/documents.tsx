@@ -158,7 +158,7 @@ export default function DocumentsPage() {
       ) : documents.length > 0 ? (
         <>
           {/* Status summary */}
-          <div className="flex items-center justify-between rounded-lg bg-muted/50 px-4 py-3">
+          <div className="flex items-center justify-between rounded-lg glass-darker px-4 py-3">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <FileText className="h-4 w-4" />
@@ -190,7 +190,7 @@ export default function DocumentsPage() {
               return (
                 <div
                   key={doc.id}
-                  className="rounded-lg border border-border bg-card p-4 flex items-center gap-4"
+                  className="rounded-lg border border-border/60 glass-darker p-4 flex items-center gap-4 hover:-translate-y-0.5 hover:shadow-glass-lg hover:border-primary/20 transition-all duration-200"
                 >
                   <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <FileText className="h-5 w-5" />
@@ -211,7 +211,7 @@ export default function DocumentsPage() {
                       <span className="shrink-0">{formatRelativeTime(doc.created_at)}</span>
                     </div>
                   </div>
-                  <Badge variant={status.variant}>
+                  <Badge variant={status.variant} className="hover:scale-105 transition-transform duration-150">
                     <StatusIcon className="mr-1 h-3 w-3" />
                     {status.label}
                   </Badge>
@@ -239,11 +239,11 @@ export default function DocumentsPage() {
           </div>
         </>
       ) : (
-        <Card>
+        <Card className="glass-darker border-none">
           <CardContent className="p-10 text-center">
             <div className="flex justify-center mb-4">
-              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-muted">
-                <Inbox className="h-7 w-7 text-muted-foreground" />
+              <div className="flex h-16 w-16 items-center justify-center rounded-xl bg-muted animate-float">
+                <Inbox className="h-8 w-8 text-muted-foreground" />
               </div>
             </div>
             <h3 className="font-heading text-lg font-bold text-foreground mb-1">
@@ -283,7 +283,7 @@ export default function DocumentsPage() {
               {...getRootProps()}
               className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${
                 isDragActive
-                  ? "border-primary bg-primary/5"
+                  ? "border-primary bg-primary/5 scale-[1.02]"
                   : "border-border hover:border-primary/50 hover:bg-muted/50"
               }`}
             >

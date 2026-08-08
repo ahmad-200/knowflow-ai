@@ -50,14 +50,14 @@ export function AppLayout() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-border transition-all duration-300",
+          "fixed inset-y-0 left-0 z-40 flex flex-col border-r border-border/60 transition-all duration-300 bg-dot-grid-light",
           sidebarOpen ? "w-64" : "w-0 -translate-x-full lg:w-16 lg:translate-x-0"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-border/60">
           <div className="flex items-center gap-3">
-            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-on-primary font-bold text-sm">
+            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary text-on-primary font-bold text-sm shadow-lg shadow-primary/20">
               KF
             </div>
             {sidebarOpen && (
@@ -73,32 +73,36 @@ export function AppLayout() {
           {navItems.map((item) => {
             const isActive = location.pathname.startsWith(item.to);
             return (
-              <Link
-                key={item.to}
-                to={item.to}
-                onClick={() => {
-                  if (window.innerWidth < 1024) setSidebarOpen(false);
-                }}
-                className={cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150",
-                  isActive
-                    ? "bg-primary/10 text-primary"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
+              <div key={item.to} className="relative">
+                {isActive && (
+                  <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-5 rounded-r-full bg-primary" />
                 )}
-              >
-                <item.icon className="h-5 w-5 shrink-0" />
-                {sidebarOpen && <span>{item.label}</span>}
-              </Link>
+                <Link
+                  to={item.to}
+                  onClick={() => {
+                    if (window.innerWidth < 1024) setSidebarOpen(false);
+                  }}
+                  className={cn(
+                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                    isActive
+                      ? "bg-primary/10 text-primary"
+                      : "text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-[1.02]"
+                  )}
+                >
+                  <item.icon className="h-5 w-5 shrink-0" />
+                  {sidebarOpen && <span>{item.label}</span>}
+                </Link>
+              </div>
             );
           })}
         </nav>
 
         {/* User area */}
-        <div className="p-3 border-t border-border">
+        <div className="p-3 border-t border-border/60">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted transition-colors duration-150 cursor-pointer">
-                <Avatar className="h-8 w-8">
+              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted/70 transition-colors duration-150 cursor-pointer">
+                <Avatar className="h-8 w-8 ring-2 ring-transparent hover:ring-primary/20 transition-all duration-150">
                   <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                     {initials}
                   </AvatarFallback>
@@ -142,7 +146,10 @@ export function AppLayout() {
         )}
       >
         {/* Top bar */}
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6">
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-border/60 bg-background/80 backdrop-blur-sm px-4 lg:px-6">
+          {/* Decorative bottom gradient line */}
+          <div className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-primary/5 via-transparent to-primary/5 pointer-events-none" />
+
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden h-9 w-9 flex items-center justify-center rounded-lg hover:bg-muted transition-colors cursor-pointer"
@@ -158,8 +165,8 @@ export function AppLayout() {
           <div className="flex-1" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-muted transition-colors cursor-pointer">
-                <Avatar className="h-7 w-7">
+              <button className="flex items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-muted transition-colors cursor-pointer group">
+                <Avatar className="h-7 w-7 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
                   <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                     {initials}
                   </AvatarFallback>
