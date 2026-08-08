@@ -182,18 +182,21 @@ export default function ChatPage() {
                 key={session.id}
                 onClick={() => navigate(`/chat/${session.id}`)}
                 className={cn(
-                  "w-full flex items-center gap-3 rounded-lg p-3 text-left transition-all duration-150 cursor-pointer",
+                  "relative w-full flex items-center gap-3 rounded-lg p-3 text-left transition-all duration-150 cursor-pointer overflow-hidden group",
                   session.id === sessionId
                     ? "bg-primary/10 text-primary shadow-sm"
                     : "hover:bg-muted text-foreground"
                 )}
               >
+                {session.id === sessionId && (
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-primary rounded-full animate-scale-in" />
+                )}
                 <div
                   className={cn(
-                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150",
+                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-150",
                     session.id === sessionId
                       ? "bg-primary/15 text-primary"
-                      : "bg-muted text-muted-foreground"
+                      : "bg-muted text-muted-foreground group-hover:scale-110 transition-transform duration-150"
                   )}
                 >
                   <MessageSquareText className="h-4 w-4" />
@@ -238,16 +241,20 @@ export default function ChatPage() {
 
       {/* Chat area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Card className="flex-1 flex flex-col overflow-hidden shadow-sm">
+        <Card className="flex-1 flex flex-col overflow-hidden shadow-glass">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 lg:p-6">
             {!sessionId && !streaming ? (
               // Empty state — no session selected
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
+                {/* Decorative circles */}
+                <div className="absolute right-12 top-12 w-20 h-20 rounded-full bg-gradient-to-br from-primary/[0.04] to-transparent animate-float pointer-events-none" style={{ animationDelay: "0s" }} />
+                <div className="absolute left-12 bottom-32 w-12 h-12 rounded-full bg-gradient-to-br from-accent/[0.03] to-transparent animate-float pointer-events-none" style={{ animationDelay: "2s" }} />
+
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 mb-6">
                   <Sparkles className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="font-heading text-xl font-bold text-foreground mb-2 tracking-tight">
+                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight gradient-text">
                   Ask anything about your documents
                 </h2>
                 <p className="text-muted-foreground text-sm max-w-sm mb-8 leading-relaxed">
@@ -266,7 +273,7 @@ export default function ChatPage() {
                         setInput(suggestion);
                         inputRef.current?.focus();
                       }}
-                      className="group w-full text-left rounded-xl border border-border bg-white px-4 py-3 text-sm text-foreground hover:border-primary/40 hover:shadow-sm hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                      className="group w-full text-left rounded-xl border border-white/20 bg-white/85 backdrop-blur-xl px-4 py-3 text-sm text-foreground shadow-glass hover:shadow-glass-lg hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
                         <Sparkles className="h-3.5 w-3.5 text-muted-foreground/50 group-hover:text-primary/60 transition-colors duration-200 shrink-0" />
@@ -299,7 +306,7 @@ export default function ChatPage() {
                 <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 mb-6">
                   <Sparkles className="h-8 w-8 text-primary" />
                 </div>
-                <h2 className="font-heading text-xl font-bold text-foreground mb-2 tracking-tight">
+                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight gradient-text">
                   Ask anything
                 </h2>
                 <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
@@ -319,7 +326,7 @@ export default function ChatPage() {
                         <Bot className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="rounded-2xl rounded-tl-sm bg-gradient-to-br from-muted to-muted/80 px-4 py-3 text-sm text-foreground max-w-[85%] shadow-sm">
+                    <div className="rounded-2xl rounded-tl-sm glass-darker px-4 py-3 text-sm text-foreground max-w-[85%] shadow-sm">
                       <div
                         dangerouslySetInnerHTML={{
                           __html:
@@ -344,14 +351,14 @@ export default function ChatPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask a question about your documents..."
-                className="flex-1 rounded-xl border border-border bg-muted/50 px-4 py-3 text-sm outline-none transition-all duration-150 focus:border-ring focus:bg-white focus:ring-2 focus:ring-ring/20 placeholder:text-muted-foreground/50 shadow-sm"
+                className="flex-1 rounded-xl border border-white/20 bg-white/85 backdrop-blur-lg px-4 py-3 text-sm outline-none transition-all duration-150 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-glass"
                 disabled={streaming}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || streaming}
                 size="icon"
-                className="h-11 w-11 shrink-0"
+                className="h-11 w-11 shrink-0 hover:shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-150"
               >
                 <Send className="h-5 w-5" />
               </Button>
@@ -370,7 +377,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   if (message.role === "user") {
     return (
       <div className="flex justify-end animate-fade-in">
-        <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-br from-primary to-primary/90 px-4 py-3 text-sm text-on-primary shadow-sm">
+        <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-br from-primary to-primary/90 px-4 py-3 text-sm text-on-primary shadow-md shadow-primary/10">
           {message.content}
         </div>
       </div>
@@ -386,7 +393,7 @@ function MessageBubble({ message }: { message: ChatMessage }) {
       </Avatar>
       <div className="min-w-0 max-w-[85%]">
         <div
-          className="rounded-2xl rounded-tl-sm bg-gradient-to-br from-muted to-muted/80 px-4 py-3 text-sm text-foreground shadow-sm"
+          className="rounded-2xl rounded-tl-sm glass-darker px-4 py-3 text-sm text-foreground shadow-sm"
           dangerouslySetInnerHTML={{ __html: renderRichText(message.content) }}
         />
         {message.citations && message.citations.length > 0 && (

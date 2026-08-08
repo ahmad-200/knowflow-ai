@@ -142,7 +142,7 @@ export default function DocumentsPage() {
             Upload and manage your PDF documents
           </p>
         </div>
-        <Button onClick={() => setUploadOpen(true)}>
+        <Button onClick={() => setUploadOpen(true)} className="hover:shadow-lg hover:shadow-primary/20 transition-all">
           <Upload className="mr-2 h-4 w-4" />
           Upload PDF
         </Button>
@@ -157,17 +157,19 @@ export default function DocumentsPage() {
         </div>
       ) : documents.length > 0 ? (
         <>
-          {/* Status summary */}
-          <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-muted/80 to-muted/30 px-4 py-3 border border-border/50">
+          {/* Status summary — glass style */}
+          <div className="flex items-center justify-between rounded-xl glass-darker px-4 py-3">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <FileText className="h-4 w-4" />
                 <strong className="text-foreground">{documents.length}</strong> total
               </span>
+              <span className="w-1 h-1 rounded-full bg-border shrink-0" />
               <span className="flex items-center gap-1.5">
                 <CheckCircle2 className="h-4 w-4 text-accent" />
                 <span>{documents.filter((d) => d.status === "ready").length} ready</span>
               </span>
+              <span className="w-1 h-1 rounded-full bg-border shrink-0" />
               <span className="flex items-center gap-1.5">
                 <Clock className="h-4 w-4 text-amber-500" />
                 <span>{documents.filter((d) => d.status === "processing").length} processing</span>
@@ -186,64 +188,63 @@ export default function DocumentsPage() {
               const status = statusConfig[doc.status];
               const StatusIcon = status.icon;
               return (
-                <Card
+                <div
                   key={doc.id}
-                  className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
+                  className="rounded-xl border border-white/20 bg-white/85 backdrop-blur-xl p-4 hover:shadow-glass-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-4"
+                  style={{ animationDelay: `${idx * 60}ms` }}
                 >
-                  <CardContent className="p-4 flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
-                      <FileText className="h-5 w-5" />
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
+                    <FileText className="h-5 w-5" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-foreground truncate">
+                      {doc.title}
+                    </p>
+                    <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
+                      <span className="truncate max-w-[140px]">{doc.file_name}</span>
+                      {doc.page_count != null && (
+                        <>
+                          <span className="w-1 h-1 rounded-full bg-border shrink-0" />
+                          <span className="shrink-0">{doc.page_count} pages</span>
+                        </>
+                      )}
+                      <span className="w-1 h-1 rounded-full bg-border shrink-0" />
+                      <span className="shrink-0">{formatRelativeTime(doc.created_at)}</span>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-foreground truncate">
-                        {doc.title}
-                      </p>
-                      <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                        <span className="truncate max-w-[140px]">{doc.file_name}</span>
-                        {doc.page_count != null && (
-                          <>
-                            <span className="w-1 h-1 rounded-full bg-border shrink-0" />
-                            <span className="shrink-0">{doc.page_count} pages</span>
-                          </>
-                        )}
-                        <span className="w-1 h-1 rounded-full bg-border shrink-0" />
-                        <span className="shrink-0">{formatRelativeTime(doc.created_at)}</span>
-                      </div>
-                    </div>
-                    <Badge variant={status.variant}>
-                      <StatusIcon className="mr-1 h-3 w-3" />
-                      {status.label}
-                    </Badge>
-                    {doc.status === "ready" && (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="shrink-0 opacity-0 group-hover:opacity-100 lg:opacity-100 transition-opacity duration-200"
-                        onClick={() => navigate("/chat")}
-                      >
-                        <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
-                        Ask
-                      </Button>
-                    )}
-                    <button
-                      onClick={() => handleDelete(doc.id, doc.title)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150 cursor-pointer shrink-0"
-                      title="Delete document"
+                  </div>
+                  <Badge variant={status.variant} className="hover:scale-105 transition-transform duration-150">
+                    <StatusIcon className="mr-1 h-3 w-3" />
+                    {status.label}
+                  </Badge>
+                  {doc.status === "ready" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="shrink-0 opacity-0 group-hover:opacity-100 lg:opacity-100 transition-opacity duration-200"
+                      onClick={() => navigate("/chat")}
                     >
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </CardContent>
-                </Card>
+                      <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
+                      Ask
+                    </Button>
+                  )}
+                  <button
+                    onClick={() => handleDelete(doc.id, doc.title)}
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-150 cursor-pointer shrink-0"
+                    title="Delete document"
+                  >
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
               );
             })}
           </div>
         </>
       ) : (
-        <Card className="hover:shadow-md transition-all duration-200">
+        <Card className="glass-darker border-white/20 shadow-glass hover:shadow-glass-lg transition-all duration-300">
           <CardContent className="p-12 text-center">
             <div className="flex justify-center mb-5">
-              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5">
-                <Inbox className="h-8 w-8 text-primary" />
+              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 animate-float">
+                <Inbox className="h-10 w-10 text-primary" />
               </div>
             </div>
             <h3 className="font-heading text-lg font-bold text-foreground mb-1">
@@ -253,7 +254,7 @@ export default function DocumentsPage() {
               Upload your first PDF document — KnowFlow AI will index it and you can ask
               questions about its content.
             </p>
-            <Button onClick={() => setUploadOpen(true)} size="lg">
+            <Button onClick={() => setUploadOpen(true)} size="lg" className="hover:shadow-lg hover:shadow-primary/20 transition-all">
               <FileUp className="mr-2 h-4 w-4" />
               Upload your first PDF
             </Button>
@@ -276,7 +277,14 @@ export default function DocumentsPage() {
               <div className="relative">
                 <Loader2 className="h-10 w-10 animate-spin text-primary" />
               </div>
-              <p className="text-sm text-muted-foreground font-medium">{uploadProgress}</p>
+              <p className="text-sm text-muted-foreground font-medium">
+                {uploadProgress}
+                <span className="inline-flex gap-0.5 ml-1">
+                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" />
+                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" style={{ animationDelay: "0.3s" }} />
+                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" style={{ animationDelay: "0.6s" }} />
+                </span>
+              </p>
             </div>
           ) : (
             <div
