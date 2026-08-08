@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../lib/auth-context";
 import { Button } from "../components/ui/button";
-import { Loader2, Sparkles } from "lucide-react";
+import { Loader2 } from "lucide-react";
 
 export default function SignupPage() {
   const { user, loading } = useAuth();
@@ -62,9 +62,9 @@ export default function SignupPage() {
 
   if (user && !loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background bg-dot-grid">
+      <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-on-primary font-bold text-xl shadow-lg shadow-primary/20 animate-breathe">
+          <div className="flex h-11 w-11 items-center justify-center rounded-lg bg-primary text-on-primary font-bold text-lg">
             KF
           </div>
           <p className="text-sm text-muted-foreground animate-pulse">
@@ -77,12 +77,11 @@ export default function SignupPage() {
 
   if (success) {
     return (
-      <div className="min-h-screen flex flex-col items-center justify-center bg-background bg-dot-grid p-4 relative overflow-hidden">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-accent/[0.04] to-primary/[0.02] rounded-full blur-3xl pointer-events-none" />
-        <div className="w-full max-w-sm text-center animate-scale-in relative">
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+        <div className="w-full max-w-sm text-center">
           <div className="flex flex-col items-center">
-            <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-white shadow-lg shadow-accent/20 animate-scale-in mb-5">
-              <svg className="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+            <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-accent text-white font-bold text-lg mb-4">
+              <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
               </svg>
             </div>
@@ -96,7 +95,7 @@ export default function SignupPage() {
             </p>
             <Button
               variant="outline"
-              className="mt-8 hover:shadow-lg hover:shadow-primary/10 transition-all"
+              className="mt-8"
               onClick={() => navigate("/login")}
             >
               Back to sign in
@@ -108,14 +107,11 @@ export default function SignupPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background bg-dot-grid p-4 relative overflow-hidden">
-      {/* Decorative gradient orb */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-br from-primary/[0.03] to-accent/[0.03] rounded-full blur-3xl pointer-events-none" />
-
-      <div className="w-full max-w-sm animate-fade-in relative">
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+      <div className="w-full max-w-sm">
         {/* Brand mark */}
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-on-primary font-bold text-xl shadow-lg shadow-primary/20 animate-float mb-5">
+          <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-primary text-on-primary font-bold text-lg mb-4">
             KF
           </div>
           <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight">
@@ -126,10 +122,10 @@ export default function SignupPage() {
           </p>
         </div>
 
-        {/* Auth form — glass card */}
+        {/* Auth form */}
         <form
           onSubmit={handleSignup}
-          className="rounded-xl glass-darker p-6 space-y-5 hover:shadow-glass-lg transition-shadow duration-300"
+          className="space-y-5"
         >
           <div className="space-y-2">
             <label
@@ -146,7 +142,7 @@ export default function SignupPage() {
               placeholder="you@company.com"
               autoComplete="email"
               required
-              className="flex h-10 w-full rounded-lg border border-border bg-white/90 px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
+              className="flex h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
             />
           </div>
 
@@ -165,7 +161,7 @@ export default function SignupPage() {
               placeholder="At least 6 characters"
               autoComplete="new-password"
               required
-              className="flex h-10 w-full rounded-lg border border-border bg-white/90 px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
+              className="flex h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
             />
           </div>
 
@@ -184,27 +180,24 @@ export default function SignupPage() {
               placeholder="Re-enter your password"
               autoComplete="new-password"
               required
-              className="flex h-10 w-full rounded-lg border border-border bg-white/90 px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
+              className="flex h-10 w-full rounded-lg border border-border bg-card px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-150"
             />
           </div>
 
           {error && (
-            <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-2.5 text-sm text-destructive animate-slide-up">
+            <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-2.5 text-sm text-destructive">
               {error}
             </div>
           )}
 
-          <Button type="submit" className="w-full h-11 hover:shadow-lg hover:shadow-primary/20 transition-all" disabled={submitting}>
+          <Button type="submit" className="w-full h-11" disabled={submitting}>
             {submitting ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 Creating account…
               </>
             ) : (
-              <>
-                <Sparkles className="mr-2 h-4 w-4" />
-                Create account
-              </>
+              "Create account"
             )}
           </Button>
 
@@ -212,7 +205,7 @@ export default function SignupPage() {
             Already have an account?{" "}
             <Link
               to="/login"
-              className="font-semibold text-primary underline-offset-2 hover:underline hover:gap-1 transition-all"
+              className="font-semibold text-primary underline-offset-2 hover:underline transition-all"
             >
               Sign in
             </Link>

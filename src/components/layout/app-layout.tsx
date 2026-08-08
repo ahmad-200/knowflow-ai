@@ -1,10 +1,9 @@
 import { useState } from "react";
-import { Link, Outlet, useNavigate, useLocation } from "react-router-dom";
+import { Link, Outlet, useLocation } from "react-router-dom";
 import {
   LayoutDashboard,
   FileText,
   MessageSquareText,
-  ChevronLeft,
   Menu,
   LogOut,
 } from "lucide-react";
@@ -28,7 +27,6 @@ const navItems = [
 export function AppLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const { user, signOut } = useAuth();
-  const navigate = useNavigate();
   const location = useLocation();
 
   const initials = user?.email
@@ -37,7 +35,6 @@ export function AppLayout() {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate("/login");
   };
 
   return (
@@ -53,14 +50,14 @@ export function AppLayout() {
       {/* Sidebar */}
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-border transition-all duration-300 bg-dot-grid-light",
+          "fixed inset-y-0 left-0 z-40 flex flex-col bg-white border-r border-border transition-all duration-300",
           sidebarOpen ? "w-64" : "w-0 -translate-x-full lg:w-16 lg:translate-x-0"
         )}
       >
         {/* Logo */}
-        <div className="flex h-16 items-center justify-between px-4 border-b border-border bg-gradient-to-r from-transparent via-primary/[0.01] to-transparent">
+        <div className="flex h-16 items-center justify-between px-4 border-b border-border">
           <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-on-primary font-bold text-sm shadow-lg shadow-primary/20">
+            <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-primary text-on-primary font-bold text-sm">
               KF
             </div>
             {sidebarOpen && (
@@ -69,12 +66,6 @@ export function AppLayout() {
               </span>
             )}
           </div>
-          <button
-            onClick={() => setSidebarOpen(false)}
-            className="hidden lg:flex h-7 w-7 items-center justify-center rounded-md hover:bg-muted transition-colors cursor-pointer"
-          >
-            <ChevronLeft className="h-4 w-4 text-muted-foreground" />
-          </button>
         </div>
 
         {/* Navigation */}
@@ -89,39 +80,30 @@ export function AppLayout() {
                   if (window.innerWidth < 1024) setSidebarOpen(false);
                 }}
                 className={cn(
-                  "relative flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150 overflow-hidden group",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150",
                   isActive
-                    ? "bg-primary/10 text-primary shadow-sm"
-                    : "text-muted-foreground hover:bg-muted hover:text-foreground hover:scale-[1.02] active:scale-[0.98]"
+                    ? "bg-primary/10 text-primary"
+                    : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )}
               >
-                {isActive && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-primary rounded-full animate-scale-in" />
-                )}
-                <item.icon className={cn(
-                  "h-5 w-5 shrink-0 transition-transform duration-150",
-                  "group-hover:scale-110"
-                )} />
+                <item.icon className="h-5 w-5 shrink-0" />
                 {sidebarOpen && <span>{item.label}</span>}
               </Link>
             );
           })}
         </nav>
 
-        {/* Bottom gradient accent */}
-        <div className="h-px bg-gradient-to-r from-transparent via-border to-transparent mx-3" />
-
         {/* User area */}
-        <div className="p-3">
-          {sidebarOpen ? (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted/70 transition-all duration-150 cursor-pointer group">
-                  <Avatar className="h-8 w-8 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
-                    <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary font-semibold text-xs">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
+        <div className="p-3 border-t border-border">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2.5 text-sm hover:bg-muted transition-colors duration-150 cursor-pointer">
+                <Avatar className="h-8 w-8">
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
+                    {initials}
+                  </AvatarFallback>
+                </Avatar>
+                {sidebarOpen && (
                   <div className="flex-1 text-left min-w-0">
                     <p className="text-sm font-medium text-foreground truncate">
                       {user?.email?.split("@")[0] || "User"}
@@ -130,43 +112,25 @@ export function AppLayout() {
                       {user?.email || ""}
                     </p>
                   </div>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          ) : (
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <button className="flex w-full items-center justify-center rounded-lg p-2 hover:bg-muted/70 transition-all duration-150 cursor-pointer group">
-                  <Avatar className="h-8 w-8 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
-                    <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary font-semibold text-xs">
-                      {initials}
-                    </AvatarFallback>
-                  </Avatar>
-                </button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="start" className="w-56">
-                <div className="px-3 py-2">
-                  <p className="text-sm font-medium text-foreground">
-                    {user?.email?.split("@")[0] || "User"}
-                  </p>
-                  <p className="text-xs text-muted-foreground truncate">
-                    {user?.email || ""}
-                  </p>
-                </div>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={handleSignOut}>
-                  <LogOut className="mr-2 h-4 w-4" />
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          )}
+                )}
+              </button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="start" className="w-56">
+              <div className="px-3 py-2">
+                <p className="text-sm font-medium text-foreground">
+                  {user?.email?.split("@")[0] || "User"}
+                </p>
+                <p className="text-xs text-muted-foreground truncate">
+                  {user?.email || ""}
+                </p>
+              </div>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={handleSignOut}>
+                <LogOut className="mr-2 h-4 w-4" />
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       </aside>
 
@@ -178,8 +142,7 @@ export function AppLayout() {
         )}
       >
         {/* Top bar */}
-        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-transparent bg-background/80 backdrop-blur-sm px-4 lg:px-6 shadow-[0_1px_0_var(--color-border)]">
-          <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-primary/5 via-primary/10 to-accent/5 pointer-events-none" />
+        <header className="sticky top-0 z-20 flex h-16 items-center gap-4 border-b border-border bg-background/80 backdrop-blur-sm px-4 lg:px-6">
           <button
             onClick={() => setSidebarOpen(true)}
             className="lg:hidden h-9 w-9 flex items-center justify-center rounded-lg hover:bg-muted transition-colors cursor-pointer"
@@ -195,9 +158,9 @@ export function AppLayout() {
           <div className="flex-1" />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-muted transition-colors cursor-pointer group">
-                <Avatar className="h-8 w-8 ring-2 ring-transparent group-hover:ring-primary/20 transition-all duration-150">
-                  <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary font-semibold text-xs">
+              <button className="flex items-center gap-2 rounded-lg px-3 py-1.5 hover:bg-muted transition-colors cursor-pointer">
+                <Avatar className="h-7 w-7">
+                  <AvatarFallback className="bg-primary/10 text-primary font-semibold text-xs">
                     {initials}
                   </AvatarFallback>
                 </Avatar>
@@ -208,12 +171,8 @@ export function AppLayout() {
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end" className="w-56">
               <div className="px-3 py-2">
-                <p className="text-sm font-medium text-foreground">
-                  {user?.email?.split("@")[0] || "User"}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
-                  {user?.email || ""}
-                </p>
+                <p className="text-sm font-medium text-foreground">{user?.email?.split("@")[0] || "User"}</p>
+                <p className="text-xs text-muted-foreground truncate">{user?.email || ""}</p>
               </div>
               <DropdownMenuSeparator />
               <DropdownMenuItem onClick={handleSignOut}>

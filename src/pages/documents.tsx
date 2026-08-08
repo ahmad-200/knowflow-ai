@@ -131,7 +131,7 @@ export default function DocumentsPage() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -142,7 +142,7 @@ export default function DocumentsPage() {
             Upload and manage your PDF documents
           </p>
         </div>
-        <Button onClick={() => setUploadOpen(true)} className="hover:shadow-lg hover:shadow-primary/20 transition-all">
+        <Button onClick={() => setUploadOpen(true)}>
           <Upload className="mr-2 h-4 w-4" />
           Upload PDF
         </Button>
@@ -152,13 +152,13 @@ export default function DocumentsPage() {
       {loading ? (
         <div className="space-y-3">
           {Array.from({ length: 3 }).map((_, i) => (
-            <Skeleton key={i} className="h-20 w-full rounded-xl" />
+            <Skeleton key={i} className="h-20 w-full rounded-lg" />
           ))}
         </div>
       ) : documents.length > 0 ? (
         <>
-          {/* Status summary — glass style */}
-          <div className="flex items-center justify-between rounded-xl glass-darker px-4 py-3">
+          {/* Status summary */}
+          <div className="flex items-center justify-between rounded-lg bg-muted/50 px-4 py-3">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <FileText className="h-4 w-4" />
@@ -184,16 +184,15 @@ export default function DocumentsPage() {
           </div>
 
           <div className="space-y-2">
-            {documents.map((doc, idx) => {
+            {documents.map((doc) => {
               const status = statusConfig[doc.status];
               const StatusIcon = status.icon;
               return (
                 <div
                   key={doc.id}
-                  className="rounded-xl border border-white/20 bg-white/85 backdrop-blur-xl p-4 hover:shadow-glass-lg hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-200 group flex items-center gap-4"
-                  style={{ animationDelay: `${idx * 60}ms` }}
+                  className="rounded-lg border border-border bg-card p-4 flex items-center gap-4"
                 >
-                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
+                  <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
                     <FileText className="h-5 w-5" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -212,7 +211,7 @@ export default function DocumentsPage() {
                       <span className="shrink-0">{formatRelativeTime(doc.created_at)}</span>
                     </div>
                   </div>
-                  <Badge variant={status.variant} className="hover:scale-105 transition-transform duration-150">
+                  <Badge variant={status.variant}>
                     <StatusIcon className="mr-1 h-3 w-3" />
                     {status.label}
                   </Badge>
@@ -220,7 +219,7 @@ export default function DocumentsPage() {
                     <Button
                       variant="outline"
                       size="sm"
-                      className="shrink-0 opacity-0 group-hover:opacity-100 lg:opacity-100 transition-opacity duration-200"
+                      className="shrink-0"
                       onClick={() => navigate("/chat")}
                     >
                       <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
@@ -229,7 +228,7 @@ export default function DocumentsPage() {
                   )}
                   <button
                     onClick={() => handleDelete(doc.id, doc.title)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-all duration-150 cursor-pointer shrink-0"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150 cursor-pointer shrink-0"
                     title="Delete document"
                   >
                     <Trash2 className="h-4 w-4" />
@@ -240,11 +239,11 @@ export default function DocumentsPage() {
           </div>
         </>
       ) : (
-        <Card className="glass-darker border-white/20 shadow-glass hover:shadow-glass-lg transition-all duration-300">
+        <Card>
           <CardContent className="p-12 text-center">
             <div className="flex justify-center mb-5">
-              <div className="flex h-20 w-20 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 animate-float">
-                <Inbox className="h-10 w-10 text-primary" />
+              <div className="flex h-18 w-18 items-center justify-center rounded-xl bg-muted">
+                <Inbox className="h-9 w-9 text-muted-foreground" />
               </div>
             </div>
             <h3 className="font-heading text-lg font-bold text-foreground mb-1">
@@ -254,7 +253,7 @@ export default function DocumentsPage() {
               Upload your first PDF document — KnowFlow AI will index it and you can ask
               questions about its content.
             </p>
-            <Button onClick={() => setUploadOpen(true)} size="lg" className="hover:shadow-lg hover:shadow-primary/20 transition-all">
+            <Button onClick={() => setUploadOpen(true)} size="lg">
               <FileUp className="mr-2 h-4 w-4" />
               Upload your first PDF
             </Button>
@@ -274,39 +273,28 @@ export default function DocumentsPage() {
 
           {uploading ? (
             <div className="flex flex-col items-center justify-center py-10 gap-4">
-              <div className="relative">
-                <Loader2 className="h-10 w-10 animate-spin text-primary" />
-              </div>
+              <Loader2 className="h-10 w-10 animate-spin text-primary" />
               <p className="text-sm text-muted-foreground font-medium">
-                {uploadProgress}
-                <span className="inline-flex gap-0.5 ml-1">
-                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" />
-                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" style={{ animationDelay: "0.3s" }} />
-                  <span className="w-1 h-1 bg-primary/40 rounded-full animate-pulse-soft" style={{ animationDelay: "0.6s" }} />
-                </span>
+                {uploadProgress}…
               </p>
             </div>
           ) : (
             <div
               {...getRootProps()}
-              className={`relative overflow-hidden border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${
+              className={`border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${
                 isDragActive
-                  ? "border-primary bg-primary/5 scale-[1.02]"
+                  ? "border-primary bg-primary/5"
                   : "border-border hover:border-primary/50 hover:bg-muted/50"
               }`}
             >
               <input {...getInputProps()} />
               <div className="flex flex-col items-center gap-3">
-                <div
-                  className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200 ${
-                    isDragActive ? "bg-primary/20 scale-110" : "bg-muted"
-                  }`}
-                >
-                  <Upload
-                    className={`h-6 w-6 transition-colors duration-200 ${
-                      isDragActive ? "text-primary" : "text-muted-foreground"
-                    }`}
-                  />
+                <div className={`flex h-12 w-12 items-center justify-center rounded-xl transition-colors duration-200 ${
+                  isDragActive ? "bg-primary/20" : "bg-muted"
+                }`}>
+                  <Upload className={`h-6 w-6 ${
+                    isDragActive ? "text-primary" : "text-muted-foreground"
+                  }`} />
                 </div>
                 {isDragActive ? (
                   <p className="text-sm font-semibold text-primary">Drop your PDF here to upload</p>

@@ -156,7 +156,7 @@ export default function ChatPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-8rem)] lg:h-[calc(100vh-7rem)] flex gap-4 animate-fade-in">
+    <div className="h-[calc(100vh-8rem)] lg:h-[calc(100vh-7rem)] flex gap-4">
       {/* Session list (sidebar) */}
       <aside className="hidden md:flex w-72 flex-col shrink-0">
         <div className="flex items-center justify-between mb-4">
@@ -182,21 +182,18 @@ export default function ChatPage() {
                 key={session.id}
                 onClick={() => navigate(`/chat/${session.id}`)}
                 className={cn(
-                  "relative w-full flex items-center gap-3 rounded-lg p-3 text-left transition-all duration-150 cursor-pointer overflow-hidden group",
+                  "w-full flex items-center gap-3 rounded-lg p-3 text-left transition-colors duration-150 cursor-pointer",
                   session.id === sessionId
-                    ? "bg-primary/10 text-primary shadow-sm"
+                    ? "bg-primary/10 text-primary"
                     : "hover:bg-muted text-foreground"
                 )}
               >
-                {session.id === sessionId && (
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 w-[3px] h-6 bg-primary rounded-full animate-scale-in" />
-                )}
                 <div
                   className={cn(
-                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-all duration-150",
+                    "flex h-8 w-8 shrink-0 items-center justify-center rounded-lg transition-colors duration-150",
                     session.id === sessionId
                       ? "bg-primary/15 text-primary"
-                      : "bg-muted text-muted-foreground group-hover:scale-110 transition-transform duration-150"
+                      : "bg-muted text-muted-foreground"
                   )}
                 >
                   <MessageSquareText className="h-4 w-4" />
@@ -213,9 +210,9 @@ export default function ChatPage() {
                 </div>
                 <ChevronRight
                   className={cn(
-                    "h-4 w-4 shrink-0 transition-all duration-150",
+                    "h-4 w-4 shrink-0",
                     session.id === sessionId
-                      ? "text-primary translate-x-0.5"
+                      ? "text-primary"
                       : "text-muted-foreground"
                   )}
                 />
@@ -241,20 +238,16 @@ export default function ChatPage() {
 
       {/* Chat area */}
       <div className="flex-1 flex flex-col min-w-0">
-        <Card className="flex-1 flex flex-col overflow-hidden shadow-glass">
+        <Card className="flex-1 flex flex-col overflow-hidden">
           {/* Messages */}
           <div className="flex-1 overflow-y-auto p-4 lg:p-6">
             {!sessionId && !streaming ? (
               // Empty state — no session selected
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                {/* Decorative circles */}
-                <div className="absolute right-12 top-12 w-20 h-20 rounded-full bg-gradient-to-br from-primary/[0.04] to-transparent animate-float pointer-events-none" style={{ animationDelay: "0s" }} />
-                <div className="absolute left-12 bottom-32 w-12 h-12 rounded-full bg-gradient-to-br from-accent/[0.03] to-transparent animate-float pointer-events-none" style={{ animationDelay: "2s" }} />
-
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 mb-6">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-muted mb-6">
+                  <Sparkles className="h-7 w-7 text-muted-foreground" />
                 </div>
-                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight gradient-text">
+                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight text-foreground">
                   Ask anything about your documents
                 </h2>
                 <p className="text-muted-foreground text-sm max-w-sm mb-8 leading-relaxed">
@@ -273,10 +266,10 @@ export default function ChatPage() {
                         setInput(suggestion);
                         inputRef.current?.focus();
                       }}
-                      className="group w-full text-left rounded-xl border border-white/20 bg-white/85 backdrop-blur-xl px-4 py-3 text-sm text-foreground shadow-glass hover:shadow-glass-lg hover:border-primary/40 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer"
+                      className="group w-full text-left rounded-lg border border-border bg-card px-4 py-3 text-sm text-foreground hover:bg-muted/50 transition-colors duration-150 cursor-pointer"
                     >
                       <span className="flex items-center gap-2">
-                        <Sparkles className="h-3.5 w-3.5 text-muted-foreground/50 group-hover:text-primary/60 transition-colors duration-200 shrink-0" />
+                        <Sparkles className="h-3.5 w-3.5 text-muted-foreground shrink-0" />
                         {suggestion}
                       </span>
                     </button>
@@ -298,15 +291,15 @@ export default function ChatPage() {
               </div>
             ) : loadingMessages ? (
               <div className="space-y-4">
-                <Skeleton className="h-16 w-2/3 rounded-xl" />
-                <Skeleton className="h-24 w-3/4 rounded-xl" />
+                <Skeleton className="h-16 w-2/3 rounded-lg" />
+                <Skeleton className="h-24 w-3/4 rounded-lg" />
               </div>
             ) : messages.length === 0 && !streaming ? (
               <div className="h-full flex flex-col items-center justify-center text-center px-4">
-                <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5 mb-6">
-                  <Sparkles className="h-8 w-8 text-primary" />
+                <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-muted mb-6">
+                  <Sparkles className="h-7 w-7 text-muted-foreground" />
                 </div>
-                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight gradient-text">
+                <h2 className="font-heading text-xl font-bold mb-2 tracking-tight text-foreground">
                   Ask anything
                 </h2>
                 <p className="text-muted-foreground text-sm max-w-sm leading-relaxed">
@@ -320,13 +313,13 @@ export default function ChatPage() {
                   <MessageBubble key={message.id} message={message} />
                 ))}
                 {streaming && (
-                  <div className="flex gap-3 animate-fade-in">
-                    <Avatar className="h-8 w-8 shrink-0 ring-2 ring-primary/10">
-                      <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary text-xs font-bold">
+                  <div className="flex gap-3">
+                    <Avatar className="h-8 w-8 shrink-0">
+                      <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                         <Bot className="h-4 w-4" />
                       </AvatarFallback>
                     </Avatar>
-                    <div className="rounded-2xl rounded-tl-sm glass-darker px-4 py-3 text-sm text-foreground max-w-[85%] shadow-sm">
+                    <div className="rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm text-foreground max-w-[85%] shadow-sm">
                       <div
                         dangerouslySetInnerHTML={{
                           __html:
@@ -343,7 +336,7 @@ export default function ChatPage() {
           </div>
 
           {/* Input bar */}
-          <div className="border-t border-border p-3 lg:p-4 bg-gradient-to-t from-background/50 to-transparent">
+          <div className="border-t border-border p-3 lg:p-4">
             <div className="flex items-center gap-2 max-w-3xl mx-auto">
               <input
                 ref={inputRef}
@@ -351,14 +344,14 @@ export default function ChatPage() {
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={handleKeyDown}
                 placeholder="Ask a question about your documents..."
-                className="flex-1 rounded-xl border border-white/20 bg-white/85 backdrop-blur-lg px-4 py-3 text-sm outline-none transition-all duration-150 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50 shadow-glass"
+                className="flex-1 rounded-xl border border-border bg-card px-4 py-3 text-sm outline-none transition-all duration-150 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 placeholder:text-muted-foreground/50"
                 disabled={streaming}
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={!input.trim() || streaming}
                 size="icon"
-                className="h-11 w-11 shrink-0 hover:shadow-lg hover:shadow-primary/20 hover:scale-105 transition-all duration-150"
+                className="h-11 w-11 shrink-0"
               >
                 <Send className="h-5 w-5" />
               </Button>
@@ -376,8 +369,8 @@ export default function ChatPage() {
 function MessageBubble({ message }: { message: ChatMessage }) {
   if (message.role === "user") {
     return (
-      <div className="flex justify-end animate-fade-in">
-        <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-gradient-to-br from-primary to-primary/90 px-4 py-3 text-sm text-on-primary shadow-md shadow-primary/10">
+      <div className="flex justify-end">
+        <div className="max-w-[85%] rounded-2xl rounded-tr-sm bg-primary px-4 py-3 text-sm text-on-primary">
           {message.content}
         </div>
       </div>
@@ -385,21 +378,21 @@ function MessageBubble({ message }: { message: ChatMessage }) {
   }
 
   return (
-    <div className="flex gap-3 animate-fade-in">
-      <Avatar className="h-8 w-8 shrink-0 ring-2 ring-primary/5">
-        <AvatarFallback className="bg-gradient-to-br from-primary/10 to-primary/5 text-primary text-xs font-bold">
+    <div className="flex gap-3">
+      <Avatar className="h-8 w-8 shrink-0">
+        <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
           <Bot className="h-4 w-4" />
         </AvatarFallback>
       </Avatar>
       <div className="min-w-0 max-w-[85%]">
         <div
-          className="rounded-2xl rounded-tl-sm glass-darker px-4 py-3 text-sm text-foreground shadow-sm"
+          className="rounded-2xl rounded-tl-sm bg-muted px-4 py-3 text-sm text-foreground shadow-sm"
           dangerouslySetInnerHTML={{ __html: renderRichText(message.content) }}
         />
         {message.citations && message.citations.length > 0 && (
           <div className="mt-2 flex flex-wrap gap-2">
             {message.citations.map((citation, idx) => (
-              <Badge key={idx} variant="outline" className="gap-1.5 py-1 hover:bg-muted transition-colors duration-150">
+              <Badge key={idx} variant="outline" className="gap-1.5 py-1">
                 <FileText className="h-3 w-3 text-muted-foreground" />
                 {citation.document_name}
                 <span className="text-muted-foreground">
