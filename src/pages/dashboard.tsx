@@ -40,7 +40,7 @@ export default function DashboardPage() {
   const recentSessions = sessions.filter((s) => s.messages.length > 0).slice(0, 3);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
+    <div className="max-w-4xl mx-auto space-y-6">
       {/* Welcome section */}
       <div className="rounded-2xl bg-muted/50 p-6 lg:p-8">
         <div className="space-y-4">
@@ -104,7 +104,7 @@ export default function DashboardPage() {
         <Card>
           <CardContent className="p-5">
             <div className="flex items-center gap-4">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-600">
+              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-muted-foreground/10 text-muted-foreground">
                 <BookOpen className="h-5 w-5" />
               </div>
               <div>

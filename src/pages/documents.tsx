@@ -240,10 +240,10 @@ export default function DocumentsPage() {
         </>
       ) : (
         <Card>
-          <CardContent className="p-12 text-center">
-            <div className="flex justify-center mb-5">
-              <div className="flex h-18 w-18 items-center justify-center rounded-xl bg-muted">
-                <Inbox className="h-9 w-9 text-muted-foreground" />
+          <CardContent className="p-10 text-center">
+            <div className="flex justify-center mb-4">
+              <div className="flex h-14 w-14 items-center justify-center rounded-xl bg-muted">
+                <Inbox className="h-7 w-7 text-muted-foreground" />
               </div>
             </div>
             <h3 className="font-heading text-lg font-bold text-foreground mb-1">
