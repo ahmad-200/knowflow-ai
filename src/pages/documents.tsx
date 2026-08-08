@@ -10,6 +10,8 @@ import {
   AlertCircle,
   Loader2,
   MessageSquare,
+  Inbox,
+  FileUp,
 } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "../components/ui/button";
@@ -129,11 +131,11 @@ export default function DocumentsPage() {
   });
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
+    <div className="max-w-4xl mx-auto space-y-6 animate-fade-in">
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">
+          <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight">
             Documents
           </h1>
           <p className="text-muted-foreground mt-1">
@@ -156,7 +158,7 @@ export default function DocumentsPage() {
       ) : documents.length > 0 ? (
         <>
           {/* Status summary */}
-          <div className="flex items-center justify-between rounded-xl bg-muted/50 px-4 py-3">
+          <div className="flex items-center justify-between rounded-xl bg-gradient-to-r from-muted/80 to-muted/30 px-4 py-3 border border-border/50">
             <div className="flex items-center gap-4 text-sm text-muted-foreground">
               <span className="flex items-center gap-1.5">
                 <FileText className="h-4 w-4" />
@@ -180,13 +182,16 @@ export default function DocumentsPage() {
           </div>
 
           <div className="space-y-2">
-            {documents.map((doc) => {
+            {documents.map((doc, idx) => {
               const status = statusConfig[doc.status];
               const StatusIcon = status.icon;
               return (
-                <Card key={doc.id} className="hover:shadow-sm transition-shadow">
+                <Card
+                  key={doc.id}
+                  className="hover:shadow-md hover:-translate-y-0.5 transition-all duration-200 group"
+                >
                   <CardContent className="p-4 flex items-center gap-4">
-                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+                    <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
                       <FileText className="h-5 w-5" />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -194,15 +199,15 @@ export default function DocumentsPage() {
                         {doc.title}
                       </p>
                       <div className="flex items-center gap-3 mt-1 text-xs text-muted-foreground">
-                        <span>{doc.file_name}</span>
+                        <span className="truncate max-w-[140px]">{doc.file_name}</span>
                         {doc.page_count != null && (
                           <>
-                            <span className="w-1 h-1 rounded-full bg-border" />
-                            <span>{doc.page_count} pages</span>
+                            <span className="w-1 h-1 rounded-full bg-border shrink-0" />
+                            <span className="shrink-0">{doc.page_count} pages</span>
                           </>
                         )}
-                        <span className="w-1 h-1 rounded-full bg-border" />
-                        <span>{formatRelativeTime(doc.created_at)}</span>
+                        <span className="w-1 h-1 rounded-full bg-border shrink-0" />
+                        <span className="shrink-0">{formatRelativeTime(doc.created_at)}</span>
                       </div>
                     </div>
                     <Badge variant={status.variant}>
@@ -213,7 +218,7 @@ export default function DocumentsPage() {
                       <Button
                         variant="outline"
                         size="sm"
-                        className="shrink-0"
+                        className="shrink-0 opacity-0 group-hover:opacity-100 lg:opacity-100 transition-opacity duration-200"
                         onClick={() => navigate("/chat")}
                       >
                         <MessageSquare className="mr-1.5 h-3.5 w-3.5" />
@@ -222,7 +227,7 @@ export default function DocumentsPage() {
                     )}
                     <button
                       onClick={() => handleDelete(doc.id, doc.title)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors cursor-pointer"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg text-muted-foreground hover:text-destructive hover:bg-destructive/10 transition-colors duration-150 cursor-pointer shrink-0"
                       title="Delete document"
                     >
                       <Trash2 className="h-4 w-4" />
@@ -234,17 +239,22 @@ export default function DocumentsPage() {
           </div>
         </>
       ) : (
-        <Card>
+        <Card className="hover:shadow-md transition-all duration-200">
           <CardContent className="p-12 text-center">
-            <FileText className="h-12 w-12 text-muted-foreground mx-auto mb-4" />
-            <h3 className="font-heading text-lg font-bold text-foreground mb-2">
-              No documents yet
+            <div className="flex justify-center mb-5">
+              <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5">
+                <Inbox className="h-8 w-8 text-primary" />
+              </div>
+            </div>
+            <h3 className="font-heading text-lg font-bold text-foreground mb-1">
+              Your knowledge base is empty
             </h3>
-            <p className="text-sm text-muted-foreground mb-6">
-              Upload your first PDF to start asking questions.
+            <p className="text-sm text-muted-foreground mb-6 max-w-sm mx-auto">
+              Upload your first PDF document — KnowFlow AI will index it and you can ask
+              questions about its content.
             </p>
-            <Button onClick={() => setUploadOpen(true)}>
-              <Upload className="mr-2 h-4 w-4" />
+            <Button onClick={() => setUploadOpen(true)} size="lg">
+              <FileUp className="mr-2 h-4 w-4" />
               Upload your first PDF
             </Button>
           </CardContent>
@@ -262,33 +272,47 @@ export default function DocumentsPage() {
           </DialogHeader>
 
           {uploading ? (
-            <div className="flex flex-col items-center justify-center py-8 gap-3">
-              <Loader2 className="h-8 w-8 animate-spin text-primary" />
-              <p className="text-sm text-muted-foreground">{uploadProgress}</p>
+            <div className="flex flex-col items-center justify-center py-10 gap-4">
+              <div className="relative">
+                <Loader2 className="h-10 w-10 animate-spin text-primary" />
+              </div>
+              <p className="text-sm text-muted-foreground font-medium">{uploadProgress}</p>
             </div>
           ) : (
             <div
               {...getRootProps()}
-              className={`border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-colors ${
+              className={`relative overflow-hidden border-2 border-dashed rounded-xl p-10 text-center cursor-pointer transition-all duration-200 ${
                 isDragActive
-                  ? "border-primary bg-primary/5"
+                  ? "border-primary bg-primary/5 scale-[1.02]"
                   : "border-border hover:border-primary/50 hover:bg-muted/50"
               }`}
             >
               <input {...getInputProps()} />
-              <Upload className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-              {isDragActive ? (
-                <p className="text-sm font-medium text-primary">Drop your PDF here</p>
-              ) : (
-                <>
-                  <p className="text-sm font-medium text-foreground">
-                    Drag & drop your PDF here
-                  </p>
-                  <p className="text-xs text-muted-foreground mt-1">
-                    or click to browse files
-                  </p>
-                </>
-              )}
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  className={`flex h-12 w-12 items-center justify-center rounded-xl transition-all duration-200 ${
+                    isDragActive ? "bg-primary/20 scale-110" : "bg-muted"
+                  }`}
+                >
+                  <Upload
+                    className={`h-6 w-6 transition-colors duration-200 ${
+                      isDragActive ? "text-primary" : "text-muted-foreground"
+                    }`}
+                  />
+                </div>
+                {isDragActive ? (
+                  <p className="text-sm font-semibold text-primary">Drop your PDF here to upload</p>
+                ) : (
+                  <>
+                    <p className="text-sm font-medium text-foreground">
+                      Drag & drop your PDF here
+                    </p>
+                    <p className="text-xs text-muted-foreground">
+                      or click to browse files
+                    </p>
+                  </>
+                )}
+              </div>
             </div>
           )}
         </DialogContent>

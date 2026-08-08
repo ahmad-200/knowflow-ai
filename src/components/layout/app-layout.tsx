@@ -87,9 +87,9 @@ export function AppLayout() {
               }}
               className={({ isActive }) =>
                 cn(
-                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150",
+                  "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
                   isActive
-                    ? "bg-primary/10 text-primary"
+                    ? "bg-primary/10 text-primary shadow-sm"
                     : "text-muted-foreground hover:bg-muted hover:text-foreground"
                 )
               }
@@ -99,6 +99,9 @@ export function AppLayout() {
             </NavLink>
           ))}
         </nav>
+
+        {/* Bottom gradient accent */}
+        <div className="h-0.5 bg-gradient-to-r from-primary/20 via-accent/20 to-primary/20" />
 
         {/* User area */}
         <div className="border-t border-border p-3">

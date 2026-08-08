@@ -1,99 +1,106 @@
-import { useEffect, useRef, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { Auth } from "@supabase/auth-ui-react";
-import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { useEffect, useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
 import { supabase } from "../lib/supabase";
 import { useAuth } from "../lib/auth-context";
-
-const appearance = {
-  theme: ThemeSupa,
-  variables: {
-    default: {
-      colors: {
-        brand: "oklch(0.3462 0.0736 256.04)",
-        brandAccent: "oklch(0.4 0.09 256.04)",
-        brandButtonText: "white",
-        defaultButtonBackground: "white",
-        defaultButtonBackgroundHover: "oklch(0.9632 0.0034 247.86)",
-        inputBackground: "white",
-        inputBorder: "oklch(0.9268 0.0063 255.48)",
-        inputBorderHover: "oklch(0.3462 0.0736 256.04)",
-        inputBorderFocus: "oklch(0.3462 0.0736 256.04)",
-      },
-      space: {
-        buttonPadding: "10px 16px",
-        inputPadding: "10px 16px",
-      },
-      radii: {
-        borderRadiusButton: "8px",
-        buttonBorderRadius: "8px",
-        inputBorderRadius: "8px",
-      },
-    },
-  },
-  style: {
-    button: {
-      fontWeight: "600",
-      fontSize: "14px",
-      height: "40px",
-    },
-    input: {
-      fontSize: "14px",
-    },
-    label: {
-      fontSize: "13px",
-      fontWeight: "500",
-      color: "oklch(0.2077 0.0398 265.75)",
-    },
-    divider: {
-      background: "oklch(0.9268 0.0063 255.48)",
-    },
-    message: {
-      fontSize: "13px",
-      borderRadius: "8px",
-      padding: "8px 12px",
-    },
-  },
-};
+import { Button } from "../components/ui/button";
+import { Loader2, Sparkles } from "lucide-react";
 
 export default function SignupPage() {
   const { user, loading } = useAuth();
   const navigate = useNavigate();
-  const [redirecting, setRedirecting] = useState(false);
-  const cardRef = useRef<HTMLDivElement>(null);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState(false);
 
   useEffect(() => {
     if (user && !loading) {
-      setRedirecting(true);
-      // Small delay so the auth UI can finish its transition
-      const timer = setTimeout(() => navigate("/dashboard", { replace: true }), 500);
+      const timer = setTimeout(() => navigate("/dashboard", { replace: true }), 300);
       return () => clearTimeout(timer);
     }
   }, [user, loading, navigate]);
 
-  // Intercept the "Have an account? Sign in" link so it navigates to the
-  // login page instead of toggling the view in place.
-  useEffect(() => {
-    const card = cardRef.current;
-    if (!card) return;
-    const onClick = (event: MouseEvent) => {
-      const target = event.target as HTMLElement | null;
-      const link = target?.closest?.('a[href="#auth-sign-in"]');
-      if (!link) return;
-      event.preventDefault();
-      event.stopPropagation();
-      navigate("/login");
-    };
-    card.addEventListener("click", onClick);
-    return () => card.removeEventListener("click", onClick);
-  }, [navigate]);
+  const handleSignup = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError(null);
 
-  if (redirecting) {
+    if (!email.trim() || !password.trim()) {
+      setError("Please fill in all fields.");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Password must be at least 6 characters.");
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError("Passwords don't match.");
+      return;
+    }
+
+    setSubmitting(true);
+    const { error: authError } = await supabase.auth.signUp({
+      email: email.trim(),
+      password,
+      options: {
+        emailRedirectTo: window.location.origin,
+      },
+    });
+
+    if (authError) {
+      setError(authError.message);
+      setSubmitting(false);
+      return;
+    }
+
+    setSuccess(true);
+    setSubmitting(false);
+  };
+
+  if (user && !loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="flex flex-col items-center gap-3">
-          <div className="h-8 w-8 rounded-full border-2 border-primary border-t-transparent animate-spin" />
-          <p className="text-sm text-muted-foreground">Redirecting...</p>
+        <div className="flex flex-col items-center gap-4">
+          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary font-bold text-xl animate-breathe">
+            KF
+          </div>
+          <p className="text-sm text-muted-foreground animate-pulse">
+            Redirecting to dashboard…
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (success) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
+        <div className="w-full max-w-sm text-center animate-fade-in">
+          <div className="flex flex-col items-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-accent to-accent/80 text-on-primary font-bold text-xl shadow-lg shadow-accent/20 mb-5">
+              <svg className="h-7 w-7" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="m4.5 12.75 6 6 9-13.5" />
+              </svg>
+            </div>
+            <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight mb-2">
+              Check your email
+            </h1>
+            <p className="text-sm text-muted-foreground max-w-xs">
+              We sent a confirmation link to{" "}
+              <span className="font-medium text-foreground">{email}</span>.
+              Click it to activate your account.
+            </p>
+            <Button
+              variant="outline"
+              className="mt-8"
+              onClick={() => navigate("/login")}
+            >
+              Back to sign in
+            </Button>
+          </div>
         </div>
       </div>
     );
@@ -101,30 +108,112 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <div className="w-full max-w-sm">
-        {/* Logo */}
+      <div className="w-full max-w-sm animate-fade-in">
+        {/* Brand mark */}
         <div className="flex flex-col items-center mb-8">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-on-primary font-bold text-xl mb-4">
+          <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 text-on-primary font-bold text-xl shadow-lg shadow-primary/20 mb-5">
             KF
           </div>
-          <h1 className="font-heading text-2xl font-bold text-foreground">
-            KnowFlow AI
+          <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight">
+            Create your account
           </h1>
-          <p className="text-sm text-muted-foreground mt-1">
-            Create your account to get started with KnowFlow AI.
+          <p className="text-sm text-muted-foreground mt-1.5">
+            Get started with KnowFlow AI
           </p>
         </div>
 
         {/* Auth form */}
-        <div ref={cardRef} className="rounded-xl border border-border bg-white p-6 shadow-sm">
-          <Auth
-            supabaseClient={supabase}
-            appearance={appearance}
-            providers={[]}
-            view="sign_up"
-            redirectTo={window.location.origin}
-          />
-        </div>
+        <form
+          onSubmit={handleSignup}
+          className="rounded-xl border border-border bg-white p-6 shadow-sm space-y-5"
+        >
+          <div className="space-y-2">
+            <label
+              htmlFor="signup-email"
+              className="text-sm font-medium text-foreground"
+            >
+              Email
+            </label>
+            <input
+              id="signup-email"
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="you@company.com"
+              autoComplete="email"
+              required
+              className="flex h-10 w-full rounded-lg border border-border bg-white px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-colors duration-150"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="signup-password"
+              className="text-sm font-medium text-foreground"
+            >
+              Password
+            </label>
+            <input
+              id="signup-password"
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="At least 6 characters"
+              autoComplete="new-password"
+              required
+              className="flex h-10 w-full rounded-lg border border-border bg-white px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-colors duration-150"
+            />
+          </div>
+
+          <div className="space-y-2">
+            <label
+              htmlFor="signup-confirm"
+              className="text-sm font-medium text-foreground"
+            >
+              Confirm password
+            </label>
+            <input
+              id="signup-confirm"
+              type="password"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              placeholder="Re-enter your password"
+              autoComplete="new-password"
+              required
+              className="flex h-10 w-full rounded-lg border border-border bg-white px-3 py-2 text-sm placeholder:text-muted-foreground/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:border-ring transition-colors duration-150"
+            />
+          </div>
+
+          {error && (
+            <div className="rounded-lg bg-destructive/10 border border-destructive/20 px-4 py-2.5 text-sm text-destructive animate-scale-in">
+              {error}
+            </div>
+          )}
+
+          <Button type="submit" className="w-full h-11" disabled={submitting}>
+            {submitting ? (
+              <>
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                Creating account…
+              </>
+            ) : (
+              <>
+                <Sparkles className="mr-2 h-4 w-4" />
+                Create account
+              </>
+            )}
+          </Button>
+
+          <p className="text-center text-sm text-muted-foreground">
+            Already have an account?{" "}
+            <Link
+              to="/login"
+              className="font-semibold text-primary underline-offset-2 hover:underline transition-colors"
+            >
+              Sign in
+            </Link>
+          </p>
+        </form>
       </div>
     </div>
   );

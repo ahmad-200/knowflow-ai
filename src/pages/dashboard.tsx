@@ -5,6 +5,8 @@ import {
   MessageSquareText,
   ArrowRight,
   Upload,
+  Sparkles,
+  BookOpen,
 } from "lucide-react";
 import { Card, CardContent } from "../components/ui/card";
 import { Button } from "../components/ui/button";
@@ -35,106 +37,121 @@ export default function DashboardPage() {
   }, []);
 
   const readyDocs = documents.filter((d) => d.status === "ready");
+  const processingDocs = documents.filter((d) => d.status === "processing");
   const recentSessions = sessions.filter((s) => s.messages.length > 0).slice(0, 3);
 
   return (
-    <div className="max-w-4xl mx-auto space-y-8">
-      {/* Welcome */}
-      <div>
-        <h1 className="font-heading text-2xl font-bold text-foreground">
-          Welcome back 👋
-        </h1>
-        <p className="text-muted-foreground mt-1">
-          Ask questions about your documents and get instant answers.
-        </p>
+    <div className="max-w-4xl mx-auto space-y-8 animate-fade-in">
+      {/* Welcome section */}
+      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/5 via-primary/[0.02] to-background border border-primary/10 p-6 lg:p-8">
+        <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-primary/[0.06] to-transparent rounded-full -translate-y-1/2 translate-x-1/4 pointer-events-none" />
+        <div className="relative">
+          <div className="flex items-center gap-3 mb-1">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-to-br from-primary to-primary/80 text-on-primary shadow-sm">
+              <Sparkles className="h-5 w-5" />
+            </div>
+            <h1 className="font-heading text-2xl font-bold text-foreground tracking-tight">
+              Welcome back
+            </h1>
+          </div>
+          <p className="text-muted-foreground mt-1 ml-12">
+            Ask questions about your documents and get instant, cited answers.
+          </p>
+        </div>
       </div>
 
       {/* Quick actions */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <button
           onClick={() => navigate("/documents")}
-          className="flex items-center gap-4 rounded-xl border border-border bg-white p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer group text-left"
+          className="group relative flex items-center gap-4 rounded-xl border border-border bg-white p-5 shadow-sm hover:shadow-md hover:border-primary/30 transition-all duration-200 cursor-pointer text-left overflow-hidden"
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
+          <div className="absolute inset-0 bg-gradient-to-r from-primary/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-primary/10 to-primary/5 text-primary group-hover:scale-105 transition-transform duration-200">
             <Upload className="h-6 w-6" />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="relative flex-1 min-w-0">
             <p className="font-semibold text-foreground">Upload a document</p>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Add a PDF to the knowledge base
+              Add a PDF to your knowledge base
             </p>
           </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-primary transition-colors shrink-0" />
+          <ArrowRight className="relative h-5 w-5 text-muted-foreground group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
         </button>
 
         <button
           onClick={() => navigate("/chat")}
-          className="flex items-center gap-4 rounded-xl border border-border bg-white p-5 shadow-sm hover:shadow-md hover:border-accent/30 transition-all duration-200 cursor-pointer group text-left"
+          className="group relative flex items-center gap-4 rounded-xl border border-border bg-white p-5 shadow-sm hover:shadow-md hover:border-accent/30 transition-all duration-200 cursor-pointer text-left overflow-hidden"
         >
-          <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-accent/10 text-accent">
+          <div className="absolute inset-0 bg-gradient-to-r from-accent/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-200" />
+          <div className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-accent/10 to-accent/5 text-accent group-hover:scale-105 transition-transform duration-200">
             <MessageSquareText className="h-6 w-6" />
           </div>
-          <div className="flex-1 min-w-0">
+          <div className="relative flex-1 min-w-0">
             <p className="font-semibold text-foreground">Start a new chat</p>
             <p className="text-sm text-muted-foreground mt-0.5">
-              Ask about your documents
+              Ask questions about your documents
             </p>
           </div>
-          <ArrowRight className="h-5 w-5 text-muted-foreground group-hover:text-accent transition-colors shrink-0" />
+          <ArrowRight className="relative h-5 w-5 text-muted-foreground group-hover:text-accent group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
         </button>
       </div>
 
       {/* Stats */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <Card>
+        <Card className="hover:shadow-md transition-all duration-200">
           <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary/10 text-primary">
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-primary/10 to-primary/5 text-primary">
                 <FileText className="h-5 w-5" />
               </div>
               <div>
                 {loading ? (
-                  <Skeleton className="h-6 w-12" />
+                  <Skeleton className="h-7 w-12 rounded-md" />
                 ) : (
-                  <p className="text-2xl font-bold text-foreground">{readyDocs.length}</p>
+                  <p className="text-2xl font-bold text-foreground tabular-nums">{readyDocs.length}</p>
                 )}
-                <p className="text-xs text-muted-foreground">Documents ready</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Documents ready</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-all duration-200">
           <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-accent/10 text-accent">
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-accent/10 to-accent/5 text-accent">
                 <MessageSquareText className="h-5 w-5" />
               </div>
               <div>
                 {loading ? (
-                  <Skeleton className="h-6 w-12" />
+                  <Skeleton className="h-7 w-12 rounded-md" />
                 ) : (
-                  <p className="text-2xl font-bold text-foreground">{sessions.length}</p>
+                  <p className="text-2xl font-bold text-foreground tabular-nums">{sessions.length}</p>
                 )}
-                <p className="text-xs text-muted-foreground">Chat sessions</p>
+                <p className="text-xs text-muted-foreground mt-0.5">Chat sessions</p>
               </div>
             </div>
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="hover:shadow-md transition-all duration-200">
           <CardContent className="p-5">
-            <div className="flex items-center gap-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-amber-100 text-amber-700">
-                <FileText className="h-5 w-5" />
+            <div className="flex items-center gap-4">
+              <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-gradient-to-br from-amber-50 to-amber-100/50 text-amber-600">
+                <BookOpen className="h-5 w-5" />
               </div>
               <div>
                 {loading ? (
-                  <Skeleton className="h-6 w-12" />
+                  <Skeleton className="h-7 w-12 rounded-md" />
                 ) : (
-                  <p className="text-2xl font-bold text-foreground">{documents.length}</p>
+                  <p className="text-2xl font-bold text-foreground tabular-nums">{documents.length}</p>
                 )}
-                <p className="text-xs text-muted-foreground">Total uploaded</p>
+                <p className="text-xs text-muted-foreground mt-0.5">
+                  {processingDocs.length > 0
+                    ? `${processingDocs.length} processing`
+                    : "Total uploaded"}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -151,9 +168,10 @@ export default function DashboardPage() {
             variant="ghost"
             size="sm"
             onClick={() => navigate("/chat")}
+            className="gap-1"
           >
             View all
-            <ArrowRight className="ml-1 h-4 w-4" />
+            <ArrowRight className="h-4 w-4" />
           </Button>
         </div>
 
@@ -164,42 +182,53 @@ export default function DashboardPage() {
           </div>
         ) : recentSessions.length > 0 ? (
           <div className="space-y-2">
-            {recentSessions.map((session) => (
+            {recentSessions.map((session, idx) => (
               <button
                 key={session.id}
                 onClick={() => navigate(`/chat/${session.id}`)}
-                className="w-full flex items-center gap-3 rounded-xl border border-border bg-white p-4 hover:shadow-sm hover:border-primary/20 transition-all duration-200 cursor-pointer text-left"
+                className="w-full flex items-center gap-3 rounded-xl border border-border bg-white p-4 hover:shadow-sm hover:border-primary/20 hover:-translate-y-0.5 transition-all duration-200 cursor-pointer text-left group"
+                style={{ animationDelay: `${idx * 80}ms` }}
               >
-                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-muted">
-                  <MessageSquareText className="h-4 w-4 text-muted-foreground" />
+                <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-gradient-to-br from-muted to-muted/50 group-hover:from-primary/10 group-hover:to-primary/5 transition-colors duration-200">
+                  <MessageSquareText className="h-4 w-4 text-muted-foreground group-hover:text-primary transition-colors duration-200" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-medium text-foreground truncate">
                     {session.title}
                   </p>
-                  <p className="text-xs text-muted-foreground">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {session.messages.length} messages ·{" "}
                     {formatRelativeTime(session.created_at)}
                   </p>
                 </div>
+                <ArrowRight className="h-4 w-4 text-muted-foreground/50 group-hover:text-primary group-hover:translate-x-0.5 transition-all duration-200 shrink-0" />
               </button>
             ))}
           </div>
         ) : (
-          <Card>
-            <CardContent className="p-8 text-center">
-              <MessageSquareText className="h-8 w-8 text-muted-foreground mx-auto mb-3" />
-              <p className="text-sm text-muted-foreground">
-                No chats yet. Start a new conversation!
+          <Card className="hover:shadow-md transition-all duration-200">
+            <CardContent className="p-10 text-center">
+              <div className="flex justify-center mb-4">
+                <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary/10 to-primary/5">
+                  <MessageSquareText className="h-7 w-7 text-primary" />
+                </div>
+              </div>
+              <h3 className="font-heading text-lg font-bold text-foreground mb-1">
+                No chats yet
+              </h3>
+              <p className="text-sm text-muted-foreground mb-6 max-w-xs mx-auto">
+                Upload a document, then start a conversation to ask questions and get instant answers.
               </p>
-              <Button
-                variant="accent"
-                size="sm"
-                className="mt-4"
-                onClick={() => navigate("/chat")}
-              >
-                Start a chat
-              </Button>
+              <div className="flex items-center justify-center gap-3">
+                <Button onClick={() => navigate("/documents")} variant="outline">
+                  <Upload className="mr-2 h-4 w-4" />
+                  Upload PDF
+                </Button>
+                <Button onClick={() => navigate("/chat")} variant="accent">
+                  <MessageSquareText className="mr-2 h-4 w-4" />
+                  Start chatting
+                </Button>
+              </div>
             </CardContent>
           </Card>
         )}
