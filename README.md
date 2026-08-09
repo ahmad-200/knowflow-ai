@@ -49,11 +49,11 @@ Built for AI Factory Hackathon by Lablab.ai:
 
 | Name | Role |
 |------|------|
-| BimbsyStats | Core RAG pipeline, document ingestion workflow, backend API connections |
-| Kaleem | Frontend developer - built the UI using React/Vite |
-| Ahmed | GitHub repository operations, version control, developer workflow sync |
-| Momina | Presentation design, visual layouts, UI component design, deck formatting |
-
+| BimbsyStats | Team Lead | RAG & Backend Lead + Final Presentation/Demo Video|
+| Kaleem | Research, Testing & Error Fixing|
+| Ahmed | Frontend/UI Developer | Technical & Repository Lead |
+| Momina | Presentation & UI Design |
+| Hmza | No Role Assigned Yet |
 ---
 
 ## Known Limitations
