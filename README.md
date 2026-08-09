@@ -49,7 +49,7 @@ Built for AI Factory Hackathon by Lablab.ai:
 
 | Name | Role |
 |------|------|
-| BimbsyStats | Team Lead | RAG & Backend Lead + Final Presentation/Demo Video|
+| BimbsyStats | Team Lead RAG & Backend Lead + Final Presentation/Demo Video|
 | Kaleem | Research, Testing & Error Fixing|
 | Ahmed | Frontend/UI Developer | Technical & Repository Lead |
 | Momina | Presentation & UI Design |
